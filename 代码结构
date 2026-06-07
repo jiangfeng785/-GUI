@@ -1,0 +1,15 @@
+SnakeGame/
+├── include/                # 头文件目录
+│   ├── constants.h         # 全局常量（地图大小、颜色宏定义等）
+│   ├── types.h             # 数据结构定义（SnakeNode, Food, GameState 等）
+│   ├── model.h             # Model 层接口声明
+│   ├── view.h              # View 层接口声明
+│   └── controller.h        # Controller 层接口声明
+│
+├── src/                    # 源文件目录
+│   ├── main.cpp            # 程序入口，主循环 (Game Loop)
+│   ├── model.cpp           # 核心逻辑：移动、碰撞、BFS寻路、技能计算
+│   ├── view.cpp            # 图形渲染：EasyX/WinAPI 绘图、UI面板、特效
+│   └── controller.cpp      # 输入处理：键盘/鼠标事件捕获、防反向逻辑
+│
+└── SnakeGame.sln           # Visual Studio 解决方案文件
