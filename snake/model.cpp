@@ -208,6 +208,10 @@ bool CheckCollision()
         return true;
     }
 
+    // 【重要修复】越界检测：防止蛇身走出地图边界，从而避免闯入右侧UI区
+    if (nx < 0 || nx >= MAP_WIDTH || ny < 0 || ny >= MAP_HEIGHT)
+        return true;
+
     // 撞墙
     if (gameMap[ny][nx] == ELEM_WALL)
         return true;
