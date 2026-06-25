@@ -1,2 +1,5 @@
-﻿  audio.cpp
+﻿  main.cpp
+  model.cpp
+D:\2022project\snake\snake\model.cpp(507,14): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+  正在生成代码...
   snake.vcxproj -> D:\2022project\snake\x64\Debug\snake.exe

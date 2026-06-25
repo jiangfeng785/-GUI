@@ -53,3 +53,6 @@ extern int gameLevel;                     // 当前关卡（从1开始）
 int GetObstacleCount();                   // 障碍物数量
 int GetBombRefreshStep();                 // 炸弹刷新步数间隔
 int GetMoveInterval();                    // 蛇移动间隔（毫秒）
+
+// 更新关卡
+void CheckLevel();

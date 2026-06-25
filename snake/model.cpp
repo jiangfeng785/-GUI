@@ -628,3 +628,15 @@ int GetMoveInterval()
     if (interval < 100) interval = 100;
     return interval;
 }
+
+// ¼ì²é¹Ø¿¨
+void CheckLevel()
+{
+    if (score / (gameLevel * 200) == 1)
+    {
+        InitMap();
+        RefreshAllFood();
+		gameLevel++;
+    }
+    return;
+}
