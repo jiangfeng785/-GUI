@@ -6,11 +6,14 @@
 #include <condition_variable>
 #include <queue>
 #include <functional>
+#include <mmsystem.h> // 必须包含，用于 PlaySound API
+
+// 链接 Windows 多媒体库
+#pragma comment(lib, "winmm.lib")
 
 // ====== 音频任务结构 ======
 struct AudioTask
 {
-    bool isStep;                // 标记是否为步伐任务
     std::function<void()> func; // 实际执行的音频函数
 };
 
@@ -41,21 +44,21 @@ static void AudioWorker()
             taskQueue.pop();
         }
 
-        // 在互斥锁外执行蜂鸣任务，不阻塞其他任务入队
+        // 在互斥锁外执行播放任务，不阻塞其他入队
         if (task.func)
             task.func();
     }
 }
 
-// 初始化音频：启动独立的音频后台线程并 detach（与主程序脱离）
+// 初始化音频：启动独立的音频后台线程并 detach
 void InitAudio()
 {
     audioThreadRunning = true;
     audioThread = std::thread(AudioWorker);
-    audioThread.detach(); // 主程序退出后，音频线程继续独立运行直到完成当前任务
+    audioThread.detach(); // 主程序退出后，音频线程继续独立完成最后的播放
 }
 
-// 停止音频：通知后台线程优雅退出（处理完剩余任务）
+// 停止音频：通知后台线程优雅退出
 void StopAudio()
 {
     {
@@ -63,100 +66,61 @@ void StopAudio()
         audioThreadRunning = false;
     }
     queueCV.notify_one();
-    // 线程已 detach，无需 join，它会自动退出
 }
 
-// 【核心修复】步伐任务：清空队列中过期的脚步任务，确保与移动实时同步
+// 根据要求取消步伐音效，该函数直接返回（无任何操作）
 void PlayStepSound()
 {
-    if (gameState == GAME_PAUSE) return;
+    // 移动音频已取消
+    return;
+}
+
+// 辅助函数：将音频播放任务推入队列
+static void PushPlayTask(const wchar_t* filename)
+{
     {
         std::lock_guard<std::mutex> lock(queueMutex);
-
-        // 创建一个临时新队列，只保留非步伐任务（如苹果、炸弹），过滤掉所有旧步伐任务
-        std::queue<AudioTask> newQueue;
-        while (!taskQueue.empty())
-        {
-            if (!taskQueue.front().isStep)
-            {
-                newQueue.push(taskQueue.front());
-            }
-            taskQueue.pop();
-        }
-        taskQueue.swap(newQueue);
-
-        // 放入最新的步伐音频任务
-        taskQueue.push({ true, []() { Beep(800, 40); } });
+        taskQueue.push({ [filename]() {
+            // 使用 PlaySound 播放 WAV 文件
+            // SND_ASYNC: 异步播放
+            // SND_NOSTOP: 不打断当前正在播放的其他音效
+            PlaySound(filename, NULL, SND_FILENAME | SND_ASYNC | SND_NOSTOP);
+        } });
     }
     queueCV.notify_one(); // 唤醒音频线程
 }
-
-// 吃苹果特殊音效（上升的三音阶）
-void PlayAppleSound()
+// 吃金苹果音效
+void PlayAppleSoundGolden()
 {
     if (gameState == GAME_PAUSE) return;
-    {
-        std::lock_guard<std::mutex> lock(queueMutex);
-        taskQueue.push({ false, []() {
-            Beep(880, 80);
-            Sleep(40);
-            Beep(1047, 80);
-            Sleep(40);
-            Beep(1319, 140);
-        } });
-    }
-    queueCV.notify_one();
+    PushPlayTask(L"gold_apple.wav");
 }
 
-// 炸弹爆炸音效（低频隆响+短促噪音模拟）
+
+// 吃红苹果音效
+void PlayAppleSoundRed()
+{
+    if (gameState == GAME_PAUSE) return;
+    PushPlayTask(L"apple.wav");
+}
+
+// 炸弹爆炸音效
 void PlayBombSound()
 {
     if (gameState == GAME_PAUSE) return;
-    {
-        std::lock_guard<std::mutex> lock(queueMutex);
-        taskQueue.push({ false, []() {
-            Beep(200, 200);
-            Sleep(50);
-            Beep(400, 100);
-            Sleep(30);
-            Beep(250, 150);
-        } });
-    }
-    queueCV.notify_one();
+    PushPlayTask(L"bomb.wav");
 }
 
-// 撞墙死亡音效（低沉急促的下降三音阶）
+// 撞墙死亡音效
 void PlayDeathSound()
 {
     if (gameState == GAME_PAUSE) return;
-    {
-        std::lock_guard<std::mutex> lock(queueMutex);
-        taskQueue.push({ false, []() {
-            Beep(800, 120);
-            Sleep(30);
-            Beep(600, 120);
-            Sleep(30);
-            Beep(400, 220);
-        } });
-    }
-    queueCV.notify_one();
+    PushPlayTask(L"die.wav");
 }
 
-// 传送门奇幻音效（重叠的上升/下降短音模拟漩涡感）
+// 传送门音效
 void PlayPortalSound()
 {
     if (gameState == GAME_PAUSE) return;
-    {
-        std::lock_guard<std::mutex> lock(queueMutex);
-        taskQueue.push({ false, []() {
-            Beep(600, 80);
-            Sleep(40);
-            Beep(900, 60);
-            Sleep(30);
-            Beep(700, 100);
-            Sleep(20);
-            Beep(1200, 140);
-        } });
-    }
-    queueCV.notify_one();
+    PushPlayTask(L"portal.wav");
 }

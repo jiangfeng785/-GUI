@@ -331,12 +331,19 @@ endPortal:
     if (headX == curFood.x && headY == curFood.y)
     {
         if (curFood.type == FOOD_NORMAL)
+        {
+            PlayAppleSoundRed();
             score += 10;
+        }
+            
         else if (curFood.type == FOOD_GOLD)
+        {
             score += 50;
+            PlayAppleSoundGolden();
+        }
+            
 
-        // 播放吃苹果音效
-        PlayAppleSound();
+        
 
         // 重置苹果位置与类型（随机为红或金）
         POINT newPos = GetRandomEmptyPos();

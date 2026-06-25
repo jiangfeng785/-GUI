@@ -9,7 +9,8 @@ void PlayStepSound();
 void StopAudio();
 
 //ÊÂ¼þÒôÐ§
-void PlayAppleSound();
+void PlayAppleSoundRed();
+void PlayAppleSoundGolden();
 void PlayBombSound();
 void PlayDeathSound();
 void PlayPortalSound();
