@@ -1,10 +1,5 @@
 ﻿  audio.cpp
-  constants.h
-  controller.cpp
-D:\2022project\snake\snake\controller.cpp(45,14): warning C4244: “初始化”: 从“TCHAR”转换到“char”，可能丢失数据
-  main.cpp
-  model.cpp
-D:\2022project\snake\snake\model.cpp(511,14): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
   view.cpp
   正在生成代码...
+  LINK : 缺少程序数据库 D:\2022project\snake\x64\Debug\snake.pdb；正在执行完全链接
   snake.vcxproj -> D:\2022project\snake\x64\Debug\snake.exe

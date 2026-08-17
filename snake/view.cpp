@@ -49,12 +49,12 @@ void InitView()
     //加载图片资源（仅首次运行加载）
     if (!bResLoaded)
     {
-        loadimage(&imgWall, FindImageFile(L"wall.png").c_str(), CELL_SIZE, 27, 0);
-        loadimage(&imgSnakeHead, FindImageFile(L"snake_head.png").c_str(), CELL_SIZE, CELL_SIZE, 0);
-        loadimage(&imgAppleRed, FindImageFile(L"apple_red.png").c_str(), CELL_SIZE, CELL_SIZE, 0);
-        loadimage(&imgAppleGold, FindImageFile(L"apple_gold.png").c_str(), CELL_SIZE, CELL_SIZE, 0);
-        loadimage(&imgBomb, FindImageFile(L"bomb.png").c_str(), CELL_SIZE, CELL_SIZE, 0);
-        loadimage(&imgPortal, FindImageFile(L"portal.png").c_str(), CELL_SIZE, CELL_SIZE, 0);
+        loadimage(&imgWall, FindImageFile(L"res/wall.png").c_str(), CELL_SIZE, 27, 0);
+        loadimage(&imgSnakeHead, FindImageFile(L"res/snake_head.png").c_str(), CELL_SIZE, CELL_SIZE, 0);
+        loadimage(&imgAppleRed, FindImageFile(L"res/apple_red.png").c_str(), CELL_SIZE, CELL_SIZE, 0);
+        loadimage(&imgAppleGold, FindImageFile(L"res/apple_gold.png").c_str(), CELL_SIZE, CELL_SIZE, 0);
+        loadimage(&imgBomb, FindImageFile(L"res/bomb.png").c_str(), CELL_SIZE, CELL_SIZE, 0);
+        loadimage(&imgPortal, FindImageFile(L"res/portal.png").c_str(), CELL_SIZE, CELL_SIZE, 0);
 
         bResLoaded = true;
     }

@@ -93,7 +93,7 @@ static void PushPlayTask(const wchar_t* filename)
 void PlayAppleSoundGolden()
 {
     if (gameState == GAME_PAUSE) return;
-    PushPlayTask(L"gold_apple.wav");
+    PushPlayTask(L"res/gold_apple.wav");
 }
 
 
@@ -101,26 +101,26 @@ void PlayAppleSoundGolden()
 void PlayAppleSoundRed()
 {
     if (gameState == GAME_PAUSE) return;
-    PushPlayTask(L"apple.wav");
+    PushPlayTask(L"res/apple.wav");
 }
 
 // ’®µØ±¨’®“Ù–ß
 void PlayBombSound()
 {
     if (gameState == GAME_PAUSE) return;
-    PushPlayTask(L"bomb.wav");
+    PushPlayTask(L"res/bomb.wav");
 }
 
 // ◊≤«ΩÀ¿Õˆ“Ù–ß
 void PlayDeathSound()
 {
     if (gameState == GAME_PAUSE) return;
-    PushPlayTask(L"die.wav");
+    PushPlayTask(L"res/die.wav");
 }
 
 // ¥´ÀÕ√≈“Ù–ß
 void PlayPortalSound()
 {
     if (gameState == GAME_PAUSE) return;
-    PushPlayTask(L"portal.wav");
+    PushPlayTask(L"res/portal.wav");
 }
