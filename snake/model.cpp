@@ -118,7 +118,7 @@ void InitMap()
             if (t != ELEM_WALL && t != ELEM_OBSTACLE) freeCount++;
         }
         return freeCount <= 1; //0 或1 个合法邻居都视为死胡同
-        };
+     };
 
     POINT pa, pb;
     int attempts = 0;
@@ -208,7 +208,7 @@ bool CheckCollision()
         return true;
     }
 
-    // 【重要修复】越界检测：防止蛇身走出地图边界，从而避免闯入右侧UI区
+    // 越界检测：防止蛇身走出地图边界，从而避免闯入右侧UI区
     if (nx < 0 || nx >= MAP_WIDTH || ny < 0 || ny >= MAP_HEIGHT)
         return true;
 
@@ -335,15 +335,15 @@ endPortal:
             PlayAppleSoundRed();
             score += 10;
         }
-            
+
         else if (curFood.type == FOOD_GOLD)
         {
             score += 50;
             PlayAppleSoundGolden();
         }
-            
 
-        
+
+
 
         // 重置苹果位置与类型（随机为红或金）
         POINT newPos = GetRandomEmptyPos();
@@ -499,14 +499,22 @@ bool SkillDash()
     return true;
 }
 
-// 原地复活 消耗500分，蛇缩一半长度
+// 【修改内容】原地复活：向蛇尾方向缩短一半
 bool SkillRevive()
 {
     if (score < 500 || gameState != GAME_OVER) return false;
+
+    // 额外安全判断：如果蛇身长度小于2节，缩半后可能为0，无法正常游戏，判定释放失败
+    if (snake.size() < 2) return false;
+
     score -= 500;
     int half = snake.size() / 2;
+
+    // 保留靠近蛇头的前半截（索引 0 到 half-1），删除靠近蛇尾的后半截
+    // 等同于“向蛇尾方向缩短一半”
     while (snake.size() > half)
-        snake.pop_back();
+        snake.pop_back();  // pop_back 每次删除尾部最后一个节点
+
     gameState = GAME_RUNNING;
     return true;
 }
@@ -594,7 +602,7 @@ void RefreshAllFood()
     curFood.type = FOOD_NORMAL;
 
     bombList.clear();
-    for (int i = 0; i < MAX_BOMB_COUNT; i++)
+    for (int i = 0; i < 3; i++)
     {
         POINT pBomb = GetRandomEmptyPos();
         Food b;
@@ -636,7 +644,7 @@ void CheckLevel()
     {
         InitMap();
         RefreshAllFood();
-		gameLevel++;
+        gameLevel++;
     }
     return;
 }
